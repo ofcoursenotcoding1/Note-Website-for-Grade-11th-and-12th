@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Coding Solutions – Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Reset + base */
+        * {
+            scroll-behavior: smooth;
+
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        .features a {
+            text-decoration: none;
+            display: block;
+            /* makes whole card clickable */
+        }
+
+        body {
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: #0b1020;
+            /* fallback while image loads */
+            position: relative;
+        }
+
+        /* ============= Background IMAGE (full-viewport) ============= */
+        .bg-img {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            filter: blur(6px) brightness(.75);
+            transform: scale(1.02);
+            z-index: -3;
+            pointer-events: none;
+            display: block;
+        }
+
+        /* Optional overlay for extra contrast */
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(3, 7, 18, 0.25), rgba(3, 7, 18, 0.35));
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Page content container */
+        .site {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background: rgba(0, 0, 33, 0.85);
+            /* new dark translucent header */
+            color: #fff;
+            padding: 18px 14px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(6px);
+            z-index: 10;
+        }
+
+        header h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: 500;
+            transition: transform .18s, color .18s;
+        }
+
+        nav a:hover {
+            color: #fde68a;
+            transform: translateY(-2px);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            color: #fff;
+        }
+
+        .hero h2 {
+            font-size: 2.6rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            margin-bottom: 26px;
+            color: #f3f4f6;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn {
+            display: inline-block;
+            background: #fff;
+            color: #084298;
+            padding: 12px 28px;
+            border-radius: 999px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(3, 7, 18, 0.25);
+            transition: transform .22s, box-shadow .22s, background .22s, color .22s;
+        }
+
+        .btn:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 44px rgba(3, 7, 18, 0.35);
+            background: #fde68a;
+            color: #111827;
+        }
+
+        /* Sections */
+        section {
+            padding: 64px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            text-align: center;
+            font-size: 2.0rem;
+            color: #fff;
+            margin-bottom: 28px;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+        }
+
+        /* About */
+        .about p {
+            max-width: 880px;
+            margin: 0 auto;
+            color: #e6eef9;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+
+        /* Features grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 26px;
+            margin-top: 26px;
+        }
+
+        .card {
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.94);
+            color: #081124;
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 10px 28px rgba(2, 6, 23, 0.36);
+            transform: translateY(28px);
+            opacity: 0;
+            transition: transform .45s cubic-bezier(.2, .9, .2, 1), box-shadow .25s, opacity .45s;
+            backdrop-filter: blur(6px);
+        }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(2, 6, 23, 0.45);
+        }
+
+        .card h3 {
+            color: #0f172a;
+            margin-bottom: 10px;
+            font-size: 1.25rem;
+        }
+
+        .card p {
+            color: #334155;
+        }
+
+        /* Contact */
+        .contact-form {
+            max-width: 680px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 26px;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(2, 6, 23, 0.36);
+            transform: translateY(28px);
+            opacity: 0;
+            transition: transform .45s ease, opacity .45s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px 14px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ccd6e6;
+            font-size: 1rem;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+            border-color: #3b82f6;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px 10px;
+            color: #e6eef9;
+            margin-top: 36px;
+        }
+
+        /* Reveal on scroll helper */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        .revealed {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+            transition: all .6s cubic-bezier(.2, .9, .2, 1);
+        }
+
+        /* Responsive tweaks */
+        @media (max-width:640px) {
+            .hero {
+                padding: 64px 18px;
+            }
+
+            .hero h2 {
+                font-size: 1.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Full-viewport image -->
+    <img class="bg-img" src="background.jpg" alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="bg-overlay" aria-hidden="true"></div>
+
+    <div class="site">
+        <header>
+            <h1>Coding Solutions</h1>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="grade11.html">Grade 11</a>
+                <a href="grade12.html">Grade 12</a>
+                <a href="leetcode.html">Leetcode</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </header>
+
+        <!-- Hero -->
+        <section class="hero">
+            <h2>Level Up Your Coding Skills</h2>
+            <p>Practice Grade 11 &amp; 12 coding problems with step-by-step solutions and clear explanations.</p>
+            <a class="btn" href="grade11.html">Start Learning</a>
+        </section>
+
+        <!-- About -->
+        <section class="about" id="about">
+            <h2>About Coding Solutions</h2>
+            <p>We help Grade 11 &amp; 12 students master programming fundamentals and advanced topics through curated
+                exercises, detailed solutions, and resources designed for exam prep and real learning.</p>
+        </section>
+
+        <!-- Features -->
+
+        <section class="features-wrap">
+            <h2>What you'll find</h2>
+            <div class="features">
+                <a class="card reveal" href="grade11.html">
+                    <h3>Grade 11</h3>
+                    <p>Beginner-friendly problems focused on basics: variables, loops, conditionals and arrays.</p>
+                </a>
+                <a class="card reveal" href="grade12.html">
+                    <h3>Grade 12</h3>
+                    <p>Advanced tasks: recursion, classes, file handling and algorithmic thinking.</p>
+                </a>
+                <a class="card reveal" href="leetcode.html">
+                    <h3>Leetcode</h3>
+                    <p>Study tips, example solutions, cheat sheets and further reading to level up fast.</p>
+                </a>
+            </div>
+        </section>
+
+
+        <!-- Contact -->
+<section id="contact">
+  <h2>Get in Touch</h2>
+  <form action="https://formspree.io/f/xnnvpadw" method="POST" class="contact-form reveal" id="contact-form">
+    <input type="text" name="name" placeholder="Your name" required />
+    <input type="email" name="email" placeholder="Your email" required />
+    <textarea name="message" rows="5" placeholder="Your message"></textarea>
+    <div style="text-align:right;">
+      <button type="submit"
+        style="padding:10px 18px;border-radius:8px;border:none;background:linear-gradient(90deg,#6366f1,#3b82f6);color:#fff;font-weight:600;cursor:pointer;">
+        Send
+      </button>
+    </div>
+  </form>
+</section>
+
+<footer>
+  <p>© 2025 Coding Solutions</p>
+</footer>
+</div>
+
+<script>
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('revealed');
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.18 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Unique Thank-You Popup
+  document.getElementById("contact-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    fetch(form.action, {
+      method: form.method,
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(response => {
+      if (response.ok) {
+        const popup = document.createElement("div");
+        popup.innerHTML = `
+          <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);
+          display:flex;align-items:center;justify-content:center;z-index:9999;">
+            <div style="background:#fff;padding:30px;border-radius:12px;text-align:center;max-width:320px;">
+              <h3 style="color:#3b82f6;">🎉 Message Sent!</h3>
+              <p>Thanks for reaching out! Your message just landed in my inbox 🚀.<br>I’ll reply as soon as possible.</p>
+              <button onclick="this.parentElement.parentElement.remove()" 
+              style="margin-top:15px;padding:8px 14px;border:none;border-radius:8px;background:#3b82f6;color:#fff;cursor:pointer;">Close</button>
+            </div>
+          </div>`;
+        document.body.appendChild(popup);
+        form.reset();
+      } else {
+        alert("⚠️ Oops! Something went wrong. Please try again.");
+      }
+    });
+  });
+</script>
+</body>
+</html>
